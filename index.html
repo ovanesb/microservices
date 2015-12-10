@@ -29,7 +29,7 @@
     <![endif]-->
 </head>
 
-<body style="background:black;">
+<body>
 
 <div class="reveal">
 
@@ -64,12 +64,11 @@
     </ul>
     </div>
 
-  <div class="fragment"><h4>What we test</h4>
+  <div class="fragment"><h4>When we test</h4>
     <ul>
-      <li>Unit / Component</li>
-      <li>Integration</li>
-      <li>System</li>
-      <li>Operational Acceptance</li>
+      <li>Install</li>
+      <li>Update</li>
+      <li>Regular basis</li>
     </ul>
   </div>
 
@@ -77,11 +76,12 @@
     <ul>
       <li>Unit / Component</li>
       <li>Integration</li>
-      <li>Interface</li>
       <li>System</li>
+      <li>Functional</li>
       <li>Operational Acceptance</li>
     </ul>
   </div>
+
 
     <aside class="notes">
         <p>
@@ -99,51 +99,104 @@
     </aside>
 </section>
 
+  <section>
+    <h3>Unit testing with Drupal sites</h3>
+
+    <ul>
+      <li class="fragment">D6 - impossible</li>
+      <li class="fragment">D7 - impractical</li>
+      <li class="fragment">D8 - irrelevant?</li>
+    </ul>
+
+    <aside class="notes">
+      In most practical situations, we don't need or cannot write unit tests
+    </aside>
+  </section>
 
   <section>
-    <h3>We are always live!</h3>
+    <h3>It's Agile, baby</h3>
 
-    <div class="fragment"><h4>When is it performed</h4>
-      <ul>
-        <li>Static</li>
-        <li>Dynamic</li>
-      </ul>
-    </div>
+    <ul>
+      <li>OMG panic</li>
+      <li class="fragment">Static tests - git hooks</li>
+      <li class="fragment">Dynamic - CI</li>
+    </ul>
 
-    <div class="fragment"><h4>What we know</h4>
-      <ul>
-        <li>White box</li>
-        <li>Black box</li>
-        <li>Grey box</li>
-      </ul>
-    </div>
-
-    <div class="fragment"><h4>What we test</h4>
-      <ul>
-        <li>Unit / Component</li>
-        <li>Integration</li>
-        <li>System</li>
-        <li>Operational Acceptance</li>
-      </ul>
-    </div>
-
-    <div class="fragment"><h4>What we test</h4>
-      <ul>
-        <li>Unit / Component</li>
-        <li>Integration</li>
-        <li>Interface</li>
-        <li>System</li>
-        <li>Operational Acceptance</li>
-      </ul>
-    </div>
 
     <aside class="notes">
       Agile process means we're always live
+      and out product is stable
+      CI - Jenkins, Codeship, Travis etc.
     </aside>
   </section>
 
 
-<section>
+  <section>
+    <h3>Typical issue flow</h3>
+
+    <ul>
+      <li>User story</li>
+      <li>Acceptance criteria</li>
+      <li>Technical description</li>
+      <li>Implementation</li>
+      <li>Design</li>
+      <li>QA</li>
+    </ul>
+
+    <aside class="notes">
+      In most practical situations, we don't need or cannot write unit tests
+    </aside>
+  </section>
+
+  <section>
+    <h3>Example</h3>
+
+    <img src="images/jira-issue.png" alt="JIRA" />
+
+    <aside class="notes">
+      In most practical situations, we don't need or cannot write unit tests
+    </aside>
+  </section>
+
+  <section>
+    <h3>What if it looked different?</h3>
+
+    <div class="fragment grow"><pre class="fragment shrink" style="border: black 1px solid">
+Feature: Core - Login & Logout
+  As an anonymous user
+  I can find a box/link for login on any page
+	I'll remain on the same page except from HP
+      </pre>
+    </div>
+
+    <pre style="border: black 1px solid">
+Background:
+	Given I am an anonymous user
+
+Scenario: Login from the homepage
+	When I go to the homepage
+	Then I need to see a link to login
+	When I press the login link
+	And I login as myusername
+	Then the current page is dashboard
+ </pre>
+
+      <pre class="fragment grow">
+Scenario: Login from random page
+	When I go to random page
+	Then I need to see a link to login
+	When I press the login link
+	And I login as myusername
+	Then the current page is random page
+    </pre>
+
+
+    <aside class="notes">
+      Sounds familiar to some of you at this point? Welcome to behat!
+    </aside>
+  </section>
+
+  <section>
     <h3>Give feedback please</h3>
     <h3>Questions?</h3>
     <br/>
@@ -192,6 +245,8 @@
             // { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
         ]
     });
+
+  Reveal.addEventListener('fragmentshown')
 
 </script>
 </body>
