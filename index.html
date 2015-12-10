@@ -34,9 +34,9 @@
 <div class="reveal">
 
 <!-- Any section element inside of this container is displayed as a slide -->
-<div class="slides">
+<section class="slides">
 <section>
-    <h3>tinyurl.com/whybehat</h3>
+    <h3><a href="http://tinyurl.com/behathow">tinyurl.com/behathow</a></h3>
     <br/>
     <h3>Let's talk testing:</h3>
   <aside class="notes">
@@ -49,69 +49,99 @@
 <section>
     <h3>Testing classification</h3>
 
-    <div class="fragment"><h4>When is it performed</h4>
+    <h4>When is it performed</h4>
     <ul>
         <li>Static</li>
         <li>Dynamic</li>
     </ul>
-    </div>
 
-    <div class="fragment"><h4>What we know</h4>
+  <aside class="notes">
+    <p>
+      Static tests analyze software source code, even before it runs
+      Dynamic tests run when the software under test runs
+    </p>
+  </aside>
+</section>
+
+  <section>
+    <h3>Testing classification (2)</h3>
+    <h4>What we know</h4>
     <ul>
         <li>White box</li>
         <li>Black box</li>
         <li>Grey box</li>
     </ul>
-    </div>
-
-  <div class="fragment"><h4>What we test</h4>
-    <ul>
-      <li>Unit / Component</li>
-      <li>Integration</li>
-      <li>System</li>
-      <li>Functional</li>
-      <li>Operational Acceptance</li>
-    </ul>
-  </div>
-
-
-  <div class="fragment"><h4>When we test</h4>
-    <ul>
-      <li>Install</li>
-      <li>Update</li>
-      <li>Regular basis</li>
-    </ul>
-  </div>
 
     <aside class="notes">
-        <p>
-          Static tests analyze software source code, even before it runs
-          Dynamic tests run when the software under test runs
-
-          Grey box is when we know software design, but run tests as af it's a black box
-
-          Unit - specific piece of code
-          Integration - units interaction
-          System tests = end to end
-          Operational acceptance = sanity check before going live
-        </p>
+      <p>
+        White box - we know internal design of the system under test
+        Box - we don't know internal design
+        Grey box is when we know (at least partially) software design,
+        but run tests as af it's a black box
+      </p>
 
     </aside>
 </section>
 
   <section>
+    <h3>Testing classification (3)</h3>
+    <h4>When we test</h4>
+    <ul>
+      <li>Install</li>
+      <li>Update</li>
+      <li>Adding / removing / updating a component</li>
+      <li>Regular basis</li>
+    </ul>
+
+    <aside class="notes">
+      <p>
+        There are tests that should run when system changes, or on a regular basis.
+        Regular checks help to reveal problems that occur under certain circumstances.
+      </p>
+
+    </aside>
+  </section>
+
+  <section>
+    <h3>Testing classification (4)</h3>
+
+    <h4>What we test</h4>
+    <ul>
+      <li>Unit / Component</li>
+      <li>Integration</li>
+      <li>System / Functional</li>
+      <li>Operational Acceptance</li>
+    </ul>
+
+    <aside class="notes">
+      <p>
+        Are we testing single component? then it's unit.
+        Are we testing interaction of several components? It's integration
+        Is it certain user stories, end to end testing of the product as a whole?
+        We also have operational acceptance tests, i.e. sanity checks before going live
+      </p>
+
+    </aside>
+
+  </section>
+
+  <section>
     <h3>It's Agile, baby</h3>
 
+    <img class="fragment" src="images/truth-consequences.jpg" alt="Truth or consequences" />
+
+    <h4>OMG panic</h4>
     <ul>
-      <li>OMG panic</li>
       <li class="fragment">Static tests - git hooks</li>
       <li class="fragment">Dynamic - CI</li>
     </ul>
 
 
     <aside class="notes">
+      Did I say live?
       Going live! Time have changed, so we go live every day (sometimes multiple times)
       Agile process means we're always live
+      We have to know the truth about the code (or have consequences)
       Out product must be stable, stable means quality. Quality assurance becomes central!
       We never can be 100% sure, but having good test coverage is crucial.
       You add a new feature, you need to be sure it doesn't break existing ones. Best case if we can use
@@ -135,6 +165,7 @@
     </ul>
 
     <aside class="notes">
+      Let's focus on dynamic testing, and start with components testing.
       Isolated unit - means that it's output doesn't depend on anything except its own state.
       Testable unit - you can clearly define expected output, if you know input.
       You cannot simply make a unit testable, you have to design the whole project to do it
@@ -225,10 +256,17 @@ Scenario: Login from random page
   <section>
     <h3>How it works</h3>
     <ul>
-      <li>Project settings (behat.yml)</li>
       <li>Scenarios (*.feature)</li>
       <li>Feature contexts</li>
+      <li>Project settings (behat.yml)</li>
     </ul>
+
+    <aside class="notes">
+      This is Benat - behavior driven framework for PHP
+      What we saw on the previous slide is behat feature.
+      Behat feature consists of steps. Every step is a PHP method of feature context
+      Feature context is a php class, usually named FeatureContext. There can be more than one
+    </aside>
   </section>
 
   <section>
@@ -274,6 +312,11 @@ class FeatureContext extends BehatContext
       For every sentence in scenario, we need to know how to evaluate it.
       All steps definitions have to be defined in feature context class
       Step definition can have parameters, taken as regular expressions from function docblock
+      If something goes wrong, we throw an exception. That's it
+      Every step has 3 possible results:
+        - step definition is not found
+        - step definition function executes and throws an exception
+        - step definition function executes with no exception (success)
     </aside>
   </section>
 
@@ -288,6 +331,9 @@ class FeatureContext extends BehatContext
 
     <aside class="notes">
       PHP inheritance to the resque! You can reuse step definitions defined by base feature context classes.
+      Mink - browser emulator, can work with real browser or headless browser like phantom
+      Drupal - drupal step definitions (create node/term/user, login, logout etc.)
+      You may still need your own step functions - extend FeatureContext class
     </aside>
   </section>
 
@@ -353,7 +399,9 @@ default:
     <aside class="notes">
       Before implementing the story, developer should understand what will be tested.
       Do we have all step definitions to test?
-      If not, then developer should review with QA and decide how to amend feature context
+      If not, then developer should review with QA and decide what to do.
+      Make a new context class? Extend existing class? Use 3d party base class?
+      This is a change in developer's mindset.
     </aside>
   </section>
 
