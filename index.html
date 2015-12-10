@@ -64,14 +64,6 @@
     </ul>
     </div>
 
-  <div class="fragment"><h4>When we test</h4>
-    <ul>
-      <li>Install</li>
-      <li>Update</li>
-      <li>Regular basis</li>
-    </ul>
-  </div>
-
   <div class="fragment"><h4>What we test</h4>
     <ul>
       <li>Unit / Component</li>
@@ -82,6 +74,14 @@
     </ul>
   </div>
 
+
+  <div class="fragment"><h4>When we test</h4>
+    <ul>
+      <li>Install</li>
+      <li>Update</li>
+      <li>Regular basis</li>
+    </ul>
+  </div>
 
     <aside class="notes">
         <p>
@@ -100,20 +100,6 @@
 </section>
 
   <section>
-    <h3>Unit testing with Drupal sites</h3>
-
-    <ul>
-      <li class="fragment">D6 - impossible</li>
-      <li class="fragment">D7 - impractical</li>
-      <li class="fragment">D8 - irrelevant?</li>
-    </ul>
-
-    <aside class="notes">
-      In most practical situations, we don't need or cannot write unit tests
-    </aside>
-  </section>
-
-  <section>
     <h3>It's Agile, baby</h3>
 
     <ul>
@@ -124,9 +110,42 @@
 
 
     <aside class="notes">
+      Going live! Time have changed, so we go live every day (sometimes multiple times)
       Agile process means we're always live
-      and out product is stable
-      CI - Jenkins, Codeship, Travis etc.
+      Out product must be stable, stable means quality. Quality assurance becomes central!
+      We never can be 100% sure, but having good test coverage is crucial.
+      You add a new feature, you need to be sure it doesn't break existing ones. Best case if we can use
+      all types of testing.
+      We perform static testing in git hooks - syntax errors, code style etc, commit messages etc.
+      For dynamic testing, we use CI tools - Jenkins, Codeship, Travis etc.
+    </aside>
+  </section>
+
+  <section>
+    <h3>Unit testing with Drupal sites</h3>
+
+    <h4>Units have to be isolated, and testable</h4>
+
+    <div><img src="images/meme-testable.jpg" class="fragment " alt=""/></div>
+
+    <ul>
+      <li class="fragment">D6 - impossible</li>
+      <li class="fragment">D7 - impractical</li>
+      <li class="fragment">D8 - irrelevant?</li>
+    </ul>
+
+    <aside class="notes">
+      Isolated unit - means that it's output doesn't depend on anything except its own state.
+      Testable unit - you can clearly define expected output, if you know input.
+      You cannot simply make a unit testable, you have to design the whole project to do it
+      (and it's not always possible - i.e. you got a ready codebase from someone else)
+      Let's be more specific, and talk about testing of Drupal-based systems. We have the core,
+      the contrib, and then our custom functionality, in custom modules and themes.
+      There was no standard way to unit test Drupal 6
+      Drupal 7 has simpletest in contrib, which works, but has its issues.
+      Drupal 8 has more testable structure.
+      In case of any Drupal core version, we can assume that it "just works". And if it's not, there are
+      enough eyes to see the problem.
     </aside>
   </section>
 
@@ -144,7 +163,9 @@
     </ul>
 
     <aside class="notes">
-      In most practical situations, we don't need or cannot write unit tests
+      I do know deny unit tests, but system tests are way more important for end client projects.
+      Here's the typical issue flow.
+      We have agreed that quality is crucial for agile projects, why we start thinking about it in the end?
     </aside>
   </section>
 
@@ -181,7 +202,8 @@ Scenario: Login from the homepage
 	Then the current page is dashboard
  </pre>
 
-      <pre class="fragment grow">
+   <div class="fragment grow">
+      <pre class="fragment shrink">
 Scenario: Login from random page
 	When I go to random page
 	Then I need to see a link to login
@@ -189,11 +211,162 @@ Scenario: Login from random page
 	And I login as myusername
 	Then the current page is random page
     </pre>
+   </div>
 
 
     <aside class="notes">
       Sounds familiar to some of you at this point? Welcome to behat!
+      We achieve 2 fundamental goals:
+      Active criteria that is formal (we like formalized things)
+      Know how to test even before functionality is implemented
     </aside>
+  </section>
+
+  <section>
+    <h3>How it works</h3>
+    <ul>
+      <li>Project settings (behat.yml)</li>
+      <li>Scenarios (*.feature)</li>
+      <li>Feature contexts</li>
+    </ul>
+  </section>
+
+  <section>
+    <h3>Evaluate a test</h3>
+
+  <div class="fragment">
+	When I go to the homepage
+  </div>
+
+  <pre class="fragment"><code>
+    # features/bootstrap/FeatureContext.php
+    <?php
+use Behat\Behat\Context\BehatContext,
+    Behat\Behat\Exception\PendingException;
+use Behat\Gherkin\Node\PyStringNode,
+    Behat\Gherkin\Node\TableNode;
+
+class FeatureContext extends BehatContext
+{
+    /**
+     * @When /^I go to the homepage$/
+     */
+    public function iGoToTheHomePage()
+    {
+      // ...your code here
+    }
+
+    /**
+     * @When /^I login as "([^"]+)"$/
+     */
+    public function iLoginAs($username)
+    {
+      // ...your code here
+    }
+
+}
+  ?>
+  </code>
+  </pre>
+
+
+    <aside class="notes">
+      For every sentence in scenario, we need to know how to evaluate it.
+      All steps definitions have to be defined in feature context class
+      Step definition can have parameters, taken as regular expressions from function docblock
+    </aside>
+  </section>
+
+  <section>
+    <h3>This sounds like enormous amount of work!</h3>
+
+    <ul>
+      <li>Mink</li>
+      <li>Drupal</li>
+      <li>REST API</li>
+    </ul>
+
+    <aside class="notes">
+      PHP inheritance to the resque! You can reuse step definitions defined by base feature context classes.
+    </aside>
+  </section>
+
+  <section>
+    <h3>What if I need to test Drupal REST API?</h3>
+
+    <ul>
+      <li>Subcontexts</li>
+      <li>Multiple contexts</li>
+      <li>Multiple test suites</li>
+    </ul>
+  </section>
+
+  <section>
+    <h3>behat.yml</h3>
+
+    <pre>
+default:
+    extensions:
+        Behat\MinkExtension:
+            base_url: http://username:password@local.example.com/
+        Drupal\DrupalExtension:
+            blackbox: ~
+            api_driver: 'drush'
+            drush:
+              alias: 'local.default'
+    suites:
+        default:
+          filters:
+            tags: ~@mobile_api
+          contexts:
+            - Drupal\DrupalExtension\Context\MinkContext:
+            - Drupal\DrupalExtension\Context\MessageContext:
+            - Drupal\DrupalExtension\Context\DrushContext:
+            - FeatureContext:
+                - ['admin','passwordofadmin', '/user/login/']
+        mobileapi:
+          filters:
+            tags: @mobile_api
+          contexts:
+            - MobileApiContext:
+                - {'base_uri': 'http://username:password/', 'api-key': 'apikeytotestlocally'}
+
+    </pre>
+
+
+  </section>
+
+  <section>
+    <h3>Better issue flow</h3>
+
+    <ul>
+      <li>User story</li>
+      <li>Acceptance criteria</li>
+      <li class="fragment" data-fragment-index="2"><span style="color:green">Write the feature</span> </li>
+      <li>Technical description</li>
+      <li>Implementation</li>
+      <li>Design</li>
+      <li class="fragment fade-out" data-fragment-index="1"><span style="color:red">QA</span></li>
+      <li class="fragment" data-fragment-index="3"><span style="color:green">QA</span></li>
+    </ul>
+
+    <aside class="notes">
+      Before implementing the story, developer should understand what will be tested.
+      Do we have all step definitions to test?
+      If not, then developer should review with QA and decide how to amend feature context
+    </aside>
+  </section>
+
+
+  <section>
+    <h3>References</h3>
+    <ul>
+      <li>http://behat.org</li>
+      <li>http://mink.behat.org - Mink Extension</li>
+      <li>http://phantomjs.org/</li>
+      <li>https://www.drupal.org/project/drupalextension - Drupal extension</li>
+      <li>https://github.com/Behat/WebApiExtension - Web Api extension</li>
+    </ul>
   </section>
 
   <section>
