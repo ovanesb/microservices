@@ -13,7 +13,7 @@
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 
-        <link rel="stylesheet" href="css/reveal.min.css">
+        <link rel="stylesheet" href="css/reveal.css">
         <link rel="stylesheet" href="css/mentoring/source/mentoring.css" id="theme">
 
         <!-- For syntax highlighting -->
@@ -36,8 +36,6 @@
             <!-- Any section element inside of this container is displayed as a slide -->
             <section class="slides">
                 <section>
-                    <h3><a href="http://tinyurl.com/behathow">tinyurl.com/behathow</a></h3>
-                    <br/>
                     <h3>Introducing to Microservices.</h3>
                     <aside class="notes">
                         <p>
@@ -52,18 +50,18 @@
                     <ul>
                         <li class="fragment">What are and not Microservices.</li>
                         <li class="fragment">Principles of Microservices.</li>
-                        <li class="fragment">Microservices Architecture Patterns. Brief basic explanation and also real life examples.</li>
-                        <li class="fragment">Deploying.</li>
-                        <li class="fragment">Testing.</li>
+                        <li class="fragment">Microservices Architecture Patterns.</li>
+                        <li class="fragment"><strike style='color:red'><span style='color:#e47911;'>Deploying</span></strike>.</li>
+                        <li class="fragment"><strike style='color:red'><span style='color:#e47911;'>Testing</span></strike>.</li>
                         <li class="fragment">Monitoring.</li>
-                        <li class="fragment">Security.</li>
+                        <li class="fragment"><strike style='color:red'><span style='color:#e47911;'>Security</span></strike>.</li>
                         <li class="fragment">Questions time.</li>
                     </ul>
 
                     <aside class="notes">
                         <p>
-                            Static tests analyze software source code, even before it runs
-                            Dynamic tests run when the software under test runs
+                            - About the Architecture - that will be really brief explanation.
+                            - Real life examples
                         </p>
                     </aside>
                 </section>
@@ -86,6 +84,11 @@
                  
 
                     <aside class="notes">
+                        <ul>
+                            <li>Explain why the word Architect is wrong (not right) when comes to building Microservices  </li>
+                            <li>Explanation of Monolith like a single building that handles a lot of operations. All of them in same place.</li>
+                            <li>Explanation of Micorservices like town and how each building handles only one operation and is easy to maintain it</li>
+                        </ul>
                         <p>
                            We create microservices around business capabilities. 
                            Single business logic.
@@ -139,314 +142,156 @@
                                 <li class="fragment">Build > Test > Release</li>
                             </ul>
                     <aside class="notes">
-                        <p>
-                            Are we testing single component? then it's unit.
-                            Are we testing interaction of several components? It's integration
-                            Is it certain user stories, end to end testing of the product as a whole?
-                            We also have operational acceptance tests, i.e. sanity checks before going live
-                        </p>
+                      
 
                     </aside>
 
                 </section>
 
                 <section>
-                    <h3>It's Agile, baby</h3>
+                    <h3>Principles of Microservices.</h3>
 
-                    <img class="fragment" src="images/truth-consequences.jpg" alt="Truth or consequences" />
-
-                    <h4>OMG panic</h4>
-                    <ul>
-                        <li class="fragment">Static tests - git hooks</li>
-                        <li class="fragment">Dynamic - CI</li>
-                    </ul>
+                    <ol>
+                        <li class="fragment">Create Microservices around business capabilities.</li>
+                        <li class="fragment">Microservices only rely on each other's public API</li>
+                        <li class="fragment">Hide your data.</li>
+                        <li class="fragment">Deploy independently.</li>
+                        <li class="fragment">Decentralization.</li>
+                        <li class="fragment">Keep each Microservice on its own host.</li>
+                    </ol>
 
 
                     <aside class="notes">
-                        Did I say live?
-                        Going live! Time have changed, so we go live every day (sometimes multiple times)
-                        Agile process means we're always live
-                        We have to know the truth about the code (or have consequences)
-                        Out product must be stable, stable means quality. Quality assurance becomes central!
-                        We never can be 100% sure, but having good test coverage is crucial.
-                        You add a new feature, you need to be sure it doesn't break existing ones. Best case if we can use
-                        all types of testing.
-                        We perform static testing in git hooks - syntax errors, code style etc, commit messages etc.
-                        For dynamic testing, we use CI tools - Jenkins, Codeship, Travis etc.
+                        <ol>
+                            <li>We've talked already about it. That we create a microservice around single business logic</li>
+                            <li>That means they communicate to each other only via those APIs.  </li>
+                            <li>Microservice A should not know about microservice B insides.  </li>
+                            <li>To be able to deploy a micoservice independently without of needing to change anything else outside of it.  </li>
+                            <li>Monolithic implementations usually have a single logical database.... With microservices, each service can manage its own database </li>
+                        </ol>
+                        And that is not all principles but some of the important once. Because of luck of time I just list the important once.
                     </aside>
                 </section>
 
                 <section>
-                    <h3>Unit testing with Drupal sites</h3>
+                    <h3>Microservices Architecture Patterns</h3>
 
-                    <h4>Units have to be isolated, and testable</h4>
-
-                    <div><img src="images/meme-testable.jpg" class="fragment " alt=""/></div>
+                    <h4 class="fragment">Three the most common patterns are:</h4>
 
                     <ul>
-                        <li class="fragment">D6 - impossible</li>
-                        <li class="fragment">D7 - impractical</li>
-                        <li class="fragment">D8 - irrelevant?</li>
+                        <li class="fragment">Orchestration</li>
+                        <li class="fragment">Choreography</li>
+                        <li class="fragment">Mixed / Hybrid</li>
                     </ul>
 
                     <aside class="notes">
-                        Let's focus on dynamic testing, and start with components testing.
-                        Isolated unit - means that it's output doesn't depend on anything except its own state.
-                        Testable unit - you can clearly define expected output, if you know input.
-                        You cannot simply make a unit testable, you have to design the whole project to do it
-                        (and it's not always possible - i.e. you got a ready codebase from someone else)
-                        Let's be more specific, and talk about testing of Drupal-based systems. We have the core,
-                        the contrib, and then our custom functionality, in custom modules and themes.
-                        There was no standard way to unit test Drupal 6
-                        Drupal 7 has simpletest in contrib, which works, but has its issues.
-                        Drupal 8 has more testable structure.
-                        In case of any Drupal core version, we can assume that it "just works". And if it's not, there are
-                        enough eyes to see the problem.
+                       Synchronous, Asynchronous
                     </aside>
                 </section>
 
 
+
                 <section>
-                    <h3>Typical issue flow</h3>
+                    <h3>Orchestration</h3>
+                    <img src='images/Orchestration.jpeg' width="500" height="600" />
+
+                    <aside class="notes">
+                    </aside>
+                </section>
+
+                
+                
+                <section>
+                    <h3>Choreography</h3>
+                    <img src='images/EventStream.jpeg' width="500" height="600" />
+
+                    <aside class="notes">
+                    </aside>
+                </section>
+                
+                
+                <section>
+                    <h3>Hybrid / Mixed</h3>
+                    <img src='images/HybridEventstream.jpeg' width="500" height="600" />
+
+                    <aside class="notes">
+                    </aside>
+                </section>
+                
+                
+                <section>
+                    <h3>Hybrid / Mixed</h3>
+                    <img src='images/HybridEventstream.jpeg' width="500" height="600" />
+
+                    <aside class="notes">
+                    </aside>
+                </section>
+                
+                
+                <section>
+                    <h3>Hybrid / Mixed</h3>
+                    <img src='images/HybridOrchestrator.jpeg' width="500" height="600" />
+
+                    <aside class="notes">
+                    </aside>
+                </section>
+
+                <section>
+                    <h3>Summary</h3>
+                    <br /><br />
+                    <h4>Orchestration:</h4>
+                      <ul>
+                        <li>Request / Response</li>
+                      </ul>
+                    <br />
+                    <br />
+                     <h4>Choreography:</h4>
+                        <ul>
+                            <li>Event based</li>
+                        </ul>
+                    <br />
+                    <br />
+                     <h4>Comunication:</h4>
+                        <ul>
+                            <li>REST</li>
+                            <li>XML</li>
+                        </ul>
+
+                    <aside class="notes">
+                       
+                    </aside>
+                </section>
+                
+                <section>
+                    <h3>Monitoring</h3>
 
                     <ul>
-                        <li>User story</li>
-                        <li>Acceptance criteria</li>
-                        <li>Technical description</li>
-                        <li>Implementation</li>
-                        <li>Design</li>
-                        <li>QA</li>
+                        <li class="fragment">ssh multiplexing</li>
+                        <li class="fragment">Kibana - ElasticSearch-backed system for viewing logs </li>
+                        <li class="fragment">Using correlation IDs to track call chains across multiple services. </li>
+                        <li class="fragment">Cascade. </li>
+                        <li class="fragment">Standardization. </li>
                     </ul>
 
                     <aside class="notes">
-                        I do know deny unit tests, but system tests are way more important for end client projects.
-                        Here's the typical issue flow.
-                        We have agreed that quality is crucial for agile projects, why we start thinking about it in the end?
+                        Before load slide do those three step ask even them.
+                        - First, we’ll want to monitor the host itself. CPU, memory—all of these things are use‐
+ful. <br /> 
+- Next, we’ll want to have access to the logs from the server itself. <br />
+- Finally, we might want to monitor the application itself.<br />
+----------
+                       -<b>ssh multiplexing</b>:  which allow us to run the same command on multiple servers
+                       -<b>Kibana</b> You can use a query syntax to search through logs, allowing you to do things like
+restrict time and date ranges or use regular expressions to find matching strings. <br />
+                       -  you have to assign a Request ID to each of your requests and log them. <br />
+                       - <b>The Cascade </b>: monitoring the integration points between systems, one service call other. <br />
+                       - <b>Standardization </b>: you want all your log in one place and follow same standards.
                     </aside>
                 </section>
-
+                
+                
                 <section>
-                    <h3>Example</h3>
-
-                    <img src="images/jira-issue.png" alt="JIRA" />
-
-                    <aside class="notes">
-                        In most practical situations, we don't need or cannot write unit tests
-                    </aside>
-                </section>
-
-                <section>
-                    <h3>What if it looked different?</h3>
-
-                    <div class="fragment grow"><pre class="fragment shrink" style="border: black 1px solid">
-Feature: Core - Login & Logout
-  As an anonymous user
-  I can find a box/link for login on any page
-	I'll remain on the same page except from HP
-                        </pre>
-                    </div>
-
-                    <pre style="border: black 1px solid">
-Background:
-	Given I am an anonymous user
-
-Scenario: Login from the homepage
-	When I go to the homepage
-	Then I need to see a link to login
-	When I press the login link
-	And I login as myusername
-	Then the current page is dashboard
-                    </pre>
-
-                    <div class="fragment grow">
-                        <pre class="fragment shrink">
-Scenario: Login from random page
-	When I go to random page
-	Then I need to see a link to login
-	When I press the login link
-	And I login as myusername
-	Then the current page is random page
-                        </pre>
-                    </div>
-
-
-                    <aside class="notes">
-                        Sounds familiar to some of you at this point? Welcome to behat!
-                        We achieve 2 fundamental goals:
-                        Active criteria that is formal (we like formalized things)
-                        Know how to test even before functionality is implemented
-                    </aside>
-                </section>
-
-                <section>
-                    <h3>How it works</h3>
-                    <ul>
-                        <li>Scenarios (*.feature)</li>
-                        <li>Feature contexts</li>
-                        <li>Project settings (behat.yml)</li>
-                    </ul>
-
-                    <aside class="notes">
-                        This is Benat - behavior driven framework for PHP
-                        What we saw on the previous slide is behat feature.
-                        Behat feature consists of steps. Every step is a PHP method of feature context
-                        Feature context is a php class, usually named FeatureContext. There can be more than one
-                    </aside>
-                </section>
-
-                <section>
-                    <h3>Evaluate a test</h3>
-
-                    <div class="fragment">
-                        When I go to the homepage
-                    </div>
-
-                    <pre class="fragment"><code>
-    # features/bootstrap/FeatureContext.php
-    <?php
-use Behat\Behat\Context\BehatContext,
-    Behat\Behat\Exception\PendingException;
-use Behat\Gherkin\Node\PyStringNode,
-    Behat\Gherkin\Node\TableNode;
-
-class FeatureContext extends BehatContext
-{
-    /**
-     * @When /^I go to the homepage$/
-     */
-    public function iGoToTheHomePage()
-    {
-      // ...your code here
-    }
-
-    /**
-     * @When /^I login as "([^"]+)"$/
-     */
-    public function iLoginAs($username)
-    {
-      // ...your code here
-    }
-
-}
-  ?>
-  </code>
-                    </pre>
-
-
-                    <aside class="notes">
-                        For every sentence in scenario, we need to know how to evaluate it.
-                        All steps definitions have to be defined in feature context class
-                        Step definition can have parameters, taken as regular expressions from function docblock
-                        If something goes wrong, we throw an exception. That's it
-                        Every step has 3 possible results:
-                        - step definition is not found
-                        - step definition function executes and throws an exception
-                        - step definition function executes with no exception (success)
-                    </aside>
-                </section>
-
-                <section>
-                    <h3>This sounds like enormous amount of work!</h3>
-
-                    <ul>
-                        <li>Mink</li>
-                        <li>Drupal</li>
-                        <li>REST API</li>
-                    </ul>
-
-                    <aside class="notes">
-                        PHP inheritance to the resque! You can reuse step definitions defined by base feature context classes.
-                        Mink - browser emulator, can work with real browser or headless browser like phantom
-                        Drupal - drupal step definitions (create node/term/user, login, logout etc.)
-                        You may still need your own step functions - extend FeatureContext class
-                    </aside>
-                </section>
-
-                <section>
-                    <h3>What if I need to test Drupal REST API?</h3>
-
-                    <ul>
-                        <li>Subcontexts</li>
-                        <li>Multiple contexts</li>
-                        <li>Multiple test suites</li>
-                    </ul>
-                </section>
-
-                <section>
-                    <h3>behat.yml</h3>
-
-                    <pre>
-default:
-    extensions:
-        Behat\MinkExtension:
-            base_url: http://username:password@local.example.com/
-        Drupal\DrupalExtension:
-            blackbox: ~
-            api_driver: 'drush'
-            drush:
-              alias: 'local.default'
-    suites:
-        default:
-          filters:
-            tags: ~@mobile_api
-          contexts:
-            - Drupal\DrupalExtension\Context\MinkContext:
-            - Drupal\DrupalExtension\Context\MessageContext:
-            - Drupal\DrupalExtension\Context\DrushContext:
-            - FeatureContext:
-                - ['admin','passwordofadmin', '/user/login/']
-        mobileapi:
-          filters:
-            tags: @mobile_api
-          contexts:
-            - MobileApiContext:
-                - {'base_uri': 'http://username:password/', 'api-key': 'apikeytotestlocally'}
-
-                    </pre>
-
-
-                </section>
-
-                <section>
-                    <h3>Better issue flow</h3>
-
-                    <ul>
-                        <li>User story</li>
-                        <li>Acceptance criteria</li>
-                        <li class="fragment" data-fragment-index="2"><span style="color:green">Write the feature</span> </li>
-                        <li>Technical description</li>
-                        <li>Implementation</li>
-                        <li>Design</li>
-                        <li class="fragment fade-out" data-fragment-index="1"><span style="color:red">QA</span></li>
-                        <li class="fragment" data-fragment-index="3"><span style="color:green">QA</span></li>
-                    </ul>
-
-                    <aside class="notes">
-                        Before implementing the story, developer should understand what will be tested.
-                        Do we have all step definitions to test?
-                        If not, then developer should review with QA and decide what to do.
-                        Make a new context class? Extend existing class? Use 3d party base class?
-                        This is a change in developer's mindset.
-                    </aside>
-                </section>
-
-
-                <section>
-                    <h3>References</h3>
-                    <ul>
-                        <li>http://behat.org</li>
-                        <li>http://mink.behat.org - Mink Extension</li>
-                        <li>http://phantomjs.org/</li>
-                        <li>https://www.drupal.org/project/drupalextension - Drupal extension</li>
-                        <li>https://github.com/Behat/WebApiExtension - Web Api extension</li>
-                    </ul>
-                </section>
-
-                <section>
-                    <h3>Give feedback please</h3>
                     <h3>Questions?</h3>
-                    <br/>
-                    <h4>@valthebald</h4>
                 </section>
         </div>
 
